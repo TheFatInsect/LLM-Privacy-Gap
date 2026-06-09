@@ -6,6 +6,10 @@
 
 **[USENIX Security 2026] What Users Ask, Policies Miss: Unveiling the Gap Between Community-Expressed Privacy Concerns and LLM Provider Policies**
 
+<p align="center">
+  <img src="assets/Framework.png" alt="LLMPrivacyGap framework" width="900">
+</p>
+
 LLMPrivacyGap is a project for exploring privacy gaps between users' privacy concerns in LLM communities and the practical coverage of providers' privacy policies. It includes analysis scripts, prompts, developed taxonomies, configuration files, privacy-preserving demo data, ground-truth artifacts, expert-review outputs, and confusion-matrix reports.
 
 > [!NOTE]
