@@ -4,7 +4,10 @@
 
 # LLMPrivacyGap
 
-[![Powered by OrcaRouter](https://img.shields.io/badge/Powered_by-OrcaRouter-2563eb)](https://www.orcarouter.ai/ref/ref_a93dd185fa50c0bbf8a2)
+<p align="center">
+  <a href="https://www.orcarouter.ai/ref/ref_a93dd185fa50c0bbf8a2"><img src="https://img.shields.io/badge/Powered_by-OrcaRouter-2563eb" alt="Powered by OrcaRouter"></a>
+  <a href="https://doi.org/10.5281/zenodo.20310585"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.20310585.svg" alt="DOI: 10.5281/zenodo.20310585"></a>
+</p>
 
 **[USENIX Security 2026] What Users Ask, Policies Miss: Unveiling the Gap Between Community-Expressed Privacy Concerns and LLM Provider Policies**
 
