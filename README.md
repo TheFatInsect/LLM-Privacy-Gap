@@ -4,6 +4,8 @@
 
 # LLMPrivacyGap
 
+[![Powered by OrcaRouter](https://img.shields.io/badge/Powered_by-OrcaRouter-2563eb)](https://www.orcarouter.ai/ref/ref_a93dd185fa50c0bbf8a2)
+
 **[USENIX Security 2026] What Users Ask, Policies Miss: Unveiling the Gap Between Community-Expressed Privacy Concerns and LLM Provider Policies**
 
 <p align="center">
@@ -30,6 +32,7 @@ LLMPrivacyGap is a project for exploring privacy gaps between users' privacy con
 | ------------------------------------------------------------ | ------------------------------------------------------------------------ |
 | [Repository Map](#repository-map)                               | Current folder layout and where key files live.                          |
 | [Quick Start](#quick-start)                                     | Minimal setup and commands for running the pipeline or demo app.         |
+| [OrcaRouter Provider](#orcarouter-provider)                     | Configure the optional OpenAI-compatible OrcaRouter backend.             |
 | [Pipeline Components](#pipeline-components)                     | Scripts for collection, concern extraction, gap auditing, and reporting. |
 | [Taxonomy Tables](#taxonomy-tables)                             | Rendered privacy-topic and privacy-policy-gap taxonomy tables.           |
 | [Anonymized Audit Demo](#anonymized-audit-demo)                 | How to run the Streamlit expert-review interface.                        |
@@ -42,6 +45,7 @@ LLMPrivacyGap is a project for exploring privacy gaps between users' privacy con
 ```text
 LLM-Privacy-Gap/
 ├── README.md
+├── .env.example
 ├── .gitignore
 ├── 01_Data_Collection/
 │   ├── 00_Scripts/
@@ -113,6 +117,40 @@ streamlit run 00_Scripts/05_gap_audit_app.py
 
 > [!TIP]
 > To use another port, run `streamlit run 00_Scripts/05_gap_audit_app.py --server.port 8502`.
+
+## OrcaRouter Provider
+
+The pipeline includes an OpenAI-compatible OrcaRouter provider configuration. Create an API key through the link below:
+
+[Get an OrcaRouter API key](https://www.orcarouter.ai/ref/ref_a93dd185fa50c0bbf8a2)
+
+Set the key in your shell before running an LLM-backed pipeline phase:
+
+```bash
+export ORCAROUTER_API_KEY="sk-orca-YOUR_KEY"
+```
+
+The provider settings are stored in `02_ConcernExtraction_GapAnalysis/configs/pipeline_config.yaml`:
+
+```yaml
+llm:
+  provider: "orcarouter"
+  base_url: "https://api.orcarouter.ai/v1"
+  api_key_env: "ORCAROUTER_API_KEY"
+  model: "openai/gpt-5"
+```
+
+Equivalent Python client configuration:
+
+```python
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.orcarouter.ai/v1",
+    api_key=os.environ["ORCAROUTER_API_KEY"],
+)
+```
 
 ## Pipeline Components
 

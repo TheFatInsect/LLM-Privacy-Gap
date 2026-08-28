@@ -2,7 +2,7 @@
 LLM Client for Data Collection Scripts
 
 Standalone LLM client for Reddit relevance filtering and other data collection tasks.
-Configured with ChatAnywhere API by default.
+Configured with OrcaRouter by default.
 """
 
 import os
@@ -19,13 +19,14 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 
 
 # =============================================================================
-# Configuration - ChatAnywhere API
+# Configuration - OrcaRouter API
 # =============================================================================
 
 DEFAULT_CONFIG = {
-    "base_url": "XXXXXXXXXXXX",
-    "api_key": "XXXXXXXXXXXXXXXXX",
-    "model": "gpt-5",
+    "provider": "orcarouter",
+    "base_url": "https://api.orcarouter.ai/v1",
+    "api_key_env": "ORCAROUTER_API_KEY",
+    "model": "openai/gpt-5",
     "temperature": 0.1,
     "max_tokens": 2000,
     "timeout": 120.0,
@@ -59,7 +60,7 @@ class LLMResponse:
 class LLMClient:
     """
     Simplified LLM client for data collection tasks.
-    Pre-configured for ChatAnywhere API.
+    Pre-configured for OrcaRouter's OpenAI-compatible API.
     """
     
     def __init__(
@@ -73,24 +74,29 @@ class LLMClient:
         max_retries: int = 3,
     ):
         """
-        Initialize LLM client with ChatAnywhere defaults.
+        Initialize LLM client with OrcaRouter defaults.
         
         Args:
-            model: Model name (default: gpt-5)
+            model: Model name (default: openai/gpt-5)
             temperature: Sampling temperature (default: 0.1)
             max_tokens: Max response tokens (default: 2000)
             timeout: Request timeout in seconds (default: 120)
-            base_url: API base URL (default: ChatAnywhere)
-            api_key: API key (default: from config)
+            base_url: API base URL (default: OrcaRouter)
+            api_key: API key (default: from ORCAROUTER_API_KEY)
             max_retries: Retry attempts on failure
         """
-        self.model = model or DEFAULT_CONFIG["model"]
+        self.model = model or os.environ.get("ORCAROUTER_MODEL", DEFAULT_CONFIG["model"])
         self.temperature = temperature if temperature is not None else DEFAULT_CONFIG["temperature"]
         self.max_tokens = max_tokens or DEFAULT_CONFIG["max_tokens"]
         self.timeout = timeout or DEFAULT_CONFIG["timeout"]
-        self.base_url = base_url or DEFAULT_CONFIG["base_url"]
-        self.api_key = api_key or os.environ.get("OPENAI_API_KEY", DEFAULT_CONFIG["api_key"])
+        self.base_url = base_url or os.environ.get("ORCAROUTER_BASE_URL", DEFAULT_CONFIG["base_url"])
+        self.api_key = api_key or os.environ.get(DEFAULT_CONFIG["api_key_env"])
         self.max_retries = max_retries
+
+        if not self.api_key:
+            raise ValueError(
+                "Missing OrcaRouter API key. Set the ORCAROUTER_API_KEY environment variable."
+            )
         
         # Initialize OpenAI client
         self._client = None

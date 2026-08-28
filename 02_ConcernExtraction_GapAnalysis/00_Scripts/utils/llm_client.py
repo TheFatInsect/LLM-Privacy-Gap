@@ -26,6 +26,7 @@ class LLMClient:
         timeout: int = 120,  # Increased default timeout
         api_key: Optional[str] = None,
         base_url: Optional[str] = None,
+        provider: str = "openai-compatible",
         max_concurrent: int = 70  # Max concurrent requests
     ):
         """
@@ -38,6 +39,7 @@ class LLMClient:
             timeout: Request timeout in seconds
             api_key: Optional API key (defaults to env var)
             base_url: Optional base URL for API
+            provider: OpenAI-compatible API provider name
             max_concurrent: Maximum concurrent requests
         """
         self.model = model
@@ -45,6 +47,12 @@ class LLMClient:
         self.max_tokens = max_tokens
         self.timeout = timeout
         self.max_concurrent = max_concurrent
+        self.provider = provider
+
+        if self.provider.lower() == "orcarouter" and not api_key:
+            raise ValueError(
+                "Missing OrcaRouter API key. Set the ORCAROUTER_API_KEY environment variable."
+            )
         
         # Store credentials for thread-local clients
         self._api_key = api_key
@@ -299,12 +307,22 @@ class LLMClient:
             Configured LLMClient instance
         """
         llm_config = config.get('llm', {})
+        provider = llm_config.get('provider', 'openai-compatible')
+        api_key_env = llm_config.get('api_key_env')
+        api_key = llm_config.get('api_key')
+        if not api_key and api_key_env:
+            api_key = os.environ.get(api_key_env)
+
         return cls(
-            model=llm_config.get('model', 'gpt-5'),
+            model=llm_config.get(
+                'model',
+                'openai/gpt-5' if provider.lower() == 'orcarouter' else 'gpt-5'
+            ),
             temperature=llm_config.get('temperature', 0),  # Default to 0 for reproducibility
             max_tokens=llm_config.get('max_tokens', 999999),
             timeout=llm_config.get('timeout', 120),  # Increased default
-            api_key=llm_config.get('api_key'),
+            api_key=api_key,
             base_url=llm_config.get('base_url'),
+            provider=provider,
             max_concurrent=llm_config.get('max_concurrent', 70)
         )

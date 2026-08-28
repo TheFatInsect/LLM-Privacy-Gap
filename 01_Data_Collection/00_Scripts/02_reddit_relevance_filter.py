@@ -80,7 +80,7 @@ class FilterConfig:
     min_score: int = 0                  # Minimum post score (filter out <= this)
     batch_size: int = 10                # Posts per LLM batch (larger = faster)
     max_workers: int = 70               # Parallel LLM requests (concurrent API calls)
-    model: str = "gpt-5"        # LLM model (mini is faster & cheaper)
+    model: str = "openai/gpt-5"        # OrcaRouter model identifier
     temperature: float = 0.0            # Zero temp for deterministic output
     max_selftext_chars: int = 1000      # Truncate long posts (save tokens)
     confidence_threshold: float = 0.5   # Min confidence to trust

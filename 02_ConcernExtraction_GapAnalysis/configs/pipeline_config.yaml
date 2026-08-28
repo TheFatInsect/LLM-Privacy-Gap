@@ -3,13 +3,15 @@
 
 # LLM Settings
 llm:
-  model: "gpt-5"
+  provider: "orcarouter"
+  model: "openai/gpt-5"
   #model: "gemini-3-pro-preview"
   temperature: 0  # Set to 0 for reproducibility
   max_tokens: 999999
   timeout: 120  # Increased timeout for stability
-  base_url: "XXXXXXXXXXXXX"
-  api_key: "XXXXXXXXXXXXXXX"
+  base_url: "https://api.orcarouter.ai/v1"
+  # Create a key at https://www.orcarouter.ai/ref/ref_a93dd185fa50c0bbf8a2
+  api_key_env: "ORCAROUTER_API_KEY"
   # Concurrency settings
   max_concurrent: 70  # Maximum parallel API requests
   max_retries: 3
